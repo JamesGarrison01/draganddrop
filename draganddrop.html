@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Drag and Drop Game</title>
+	<meta name="generator" content="BBEdit 7.0.3" />
+	
+<link rel="Stylesheet" href="../../includes/style.css" type="text/css" />
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"></script>
+
+
+    <style type="text/css">
+		p{font-size:1em;}
+		.caption{font-size:.8em;
+		font-weight:bold;}
+		img{border:solid 1px #000000;}
+		td{vertical-align:top;}
+		#draggable { width: 24px; height: 24px; background: red; }
+#helper { width: 24px; height: 24px; background: yellow; }
+
+
+ 
+/* Main content area */
+ 
+#gameContent {
+ margin: 10px;
+  font-family: Georgia, serif;
+  line-height: 1.1em;
+  color: #333;
+  margin: 5px 5px;
+  text-align: center;
+}
+ 
+#cardPile {
+  margin: 0 auto;
+  background: #fff;
+}
+ 
+
+#cardSlots {
+  margin: 10px auto 0 auto;
+  background: #99cc33;
+}
+ 
+
+#cardSlots, #cardPile {
+  width: 910px;
+  height: 300px;
+  padding: 12px;
+  border: 2px solid #333;
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+  -moz-box-shadow: 0 0 .3em rgba(0, 0, 0, .8);
+  -webkit-box-shadow: 0 0 .3em rgba(0, 0, 0, .8);
+  box-shadow: 0 0 .3em rgba(0, 0, 0, .8);
+}
+ 
+/* Individual cards and slots */
+ 
+#cardSlots div, #cardPile div {
+  float: left;
+  width: 170px;
+  height: 80px;
+  padding: 1px;
+  padding-bottom: 0;
+  border: 2px solid #333;
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+  margin: 10px 5px 0 0px;
+  background: #fff;
+}
+ 
+#cardSlots div:first-child, #cardPile div:first-child {
+  margin-left: 0;
+}
+ 
+#cardSlots div.hovered {
+  background: #aaa;
+}
+ 
+#cardSlots div {
+  border-style: dashed;
+}
+ 
+#cardPile div {
+  background: #666;
+  color: #fff;
+  font-size: .8em;
+  text-shadow: 0 2px 2px #000;
+}
+ 
+#cardPile div.ui-draggable-dragging {
+  -moz-box-shadow: 0 0 .5em rgba(0, 0, 0, .8);
+  -webkit-box-shadow: 0 0 .5em rgba(0, 0, 0, .8);
+  box-shadow: 0 0 .5em rgba(0, 0, 0, .8);
+}
+ 
+/* Individually coloured cards */
+ 
+#card1.correct { background: red; }
+#card2.correct { background: brown; }
+#card3.correct { background: orange; }
+#card4.correct { background: yellow; }
+#card5.correct { background: green; }
+#card6.correct { background: cyan; }
+#card7.correct { background: blue; }
+#card8.correct { background: indigo; }
+#card9.correct { background: purple; }
+#card10.correct { background: violet; }
+#card11.correct { background: teal; }
+#card12.correct { background: chartreuse; }
+ 
+ 
+/* "You did it!" message */
+#successMessage {
+  position: absolute;
+  left: 480px;
+  top: 500px;
+  width: 0;
+  height: 0;
+  z-index: 100;
+  background: #ccc;
+  border: 2px solid #333;
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+  -moz-box-shadow: .3em .3em .5em rgba(0, 0, 0, .8);
+  -webkit-box-shadow: .3em .3em .5em rgba(0, 0, 0, .8);
+  box-shadow: .3em .3em .5em rgba(0, 0, 0, .8);
+  padding: 20px;
+}
+#message {
+  position: absolute;
+  left: 580px;
+  top: 750px;
+  width: 0;
+  height: 0;
+  z-index: 100;
+  background: #fff;
+  border: 2px solid #333;
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+  -moz-box-shadow: .3em .3em .5em rgba(0, 0, 0, .8);
+  -webkit-box-shadow: .3em .3em .5em rgba(0, 0, 0, .8);
+  box-shadow: .3em .3em .5em rgba(0, 0, 0, .8);
+  padding: 20px;
+}
+		</style>
+
+<script type="text/javascript">
+//<!--
+	title="3D Modeling and Printing";
+	subject="SEP";
+		var list=new Array("part1");
+	 
+// Usage:
+
+
+
+
+	 function showAnswer(id){
+if(document.getElementById(id).style.display=="none"){
+
+		document.getElementById(id).style.display="";
+	}else{
+	document.getElementById(id).style.display="none";
+	}
+	}
+	  function hideAll(){
+	  for(i=0;i<list.length;i++){
+document.getElementById(list[i]).style.display="none";
+	}
+	}
+	$(function(){
+$("#answers").hide("fast");
+
+     $("#answersToggle").click(function(){
+         $("#answers").toggle("slow");
+      });
+      $("#answer1").hide("fast");
+$("#answer2").hide("fast");
+
+     $("#answer1Toggle").click(function(){
+         $("#answer1").toggle("slow");
+         $("#answer2").hide("fast");
+      });
+      $("#answer2Toggle").click(function(){
+         $("#answer2").toggle("slow");
+         $("#answer1").hide("fast");
+      });
+});
+
+$( init );
+ 
+function init() {
+  $('#makeMeDraggable').draggable();
+
+  $('#draggable').draggable( {
+    cursor: 'move',
+    containment: 'document',
+    helper: helper
+  } );
+}
+
+function helper( event ) {
+  return '<div id="helper" style="font-size:.6em;">drag!</div>';
+}
+
+var correctCards = 0;
+
+$( gameInit );
+ 
+function gameInit() {
+ 
+  // Hide the success message
+  $('#successMessage').hide();
+  $('#successMessage').css( {
+    left: '580px',
+    top: '750px',
+    width: 0,
+    height: 0
+  } );
+  $('#message').hide();
+  $('#message').css( {
+    left: '580px',
+    top: '750px',
+    width: 0,
+    height: 0
+  } );
+  // Reset the game
+  correctCards = 0;
+  $('#cardPile').html( '' );
+  $('#cardSlots').html( '' );
+ var numOfCards=12;
+  // Create the pile of shuffled cards
+  var numbers = [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ];
+  var text = [ 'history 1', 
+  'history 2',
+  'history 3',
+  'history 4',
+  'history 5',
+  'history 6',
+  'history 7',
+  'history 8',
+  'history 9', 
+'history 10',
+'history 11',
+'history 12'];
+ numbers.sort( function() { return Math.random() - .5 } );
+ 
+  for ( var i=0; i<text.length; i++ ) {
+    $('<div>' + text[numbers[i]-1] + '</div>').data( 'number', numbers[i] ).attr( 'id', 'card'+numbers[i] ).appendTo( '#cardPile' ).draggable( {
+      containment: '#content',
+      stack: '#cardPile div',
+      cursor: 'move',
+      revert: true,
+      start:hideMessage
+      
+    } );
+  }
+ 
+  // Create the card slots
+  var words = [ 'year1',  
+               'year2', 
+               'year3',
+               'year4', 
+               'year5', 
+               'year6', 
+               'year7', 
+               'year8', 
+               'year9',  
+               'year10', 
+               'year11', 
+               'year12'];
+  for ( var i=1; i<=words.length; i++ ) {
+    $('<div>' + words[i-1] + '</div>').data( 'number', i ).appendTo( '#cardSlots' ).droppable( {
+      accept: '#cardPile div',
+      hoverClass: 'hovered',
+      drop: handleCardDrop
+    } );
+  }
+ 
+}
+function handleCardDrop( event, ui ) {
+  var slotNumber = $(this).data( 'number' );
+  var cardNumber = ui.draggable.data( 'number' );
+
+  // If the card was dropped to the correct slot,
+  // change the card colour, position it directly
+  // on top of the slot, and prevent it being dragged
+  // again
+ 
+  if ( slotNumber == cardNumber ) {
+ if(slotNumber==1){
+  $('#message').show().html("Message");
+  } 
+  if(slotNumber==2){
+  $('#message').show().html("Message");
+  } 
+  if(slotNumber==3){
+  $('#message').show().html("Message");
+  } 
+  if(slotNumber==4){
+  $('#message').show().html("Message");
+	 } 
+  if(slotNumber==5){
+  $('#message').show().html("Message");
+  } 
+  if(slotNumber==6){
+  $('#message').show().html("Message");
+  } 
+  if(slotNumber==7){
+  $('#message').show().html("Message");
+  } 
+  if(slotNumber==8){
+  $('#message').show().html("Message");
+  } 
+  if(slotNumber==9){
+  $('#message').show().html("Message");
+  } 
+  if(slotNumber==10){
+  $('#message').show().html("Message");
+  } 
+  if(slotNumber==11){
+  $('#message').show().html("Message");
+  } 
+  if(slotNumber==12){
+  $('#message').show().html("Message");
+  } 
+  
+  animateMessage();
+    ui.draggable.addClass( 'correct' );
+    ui.draggable.draggable( 'disable' );
+    $(this).droppable( 'disable' );
+    ui.draggable.position( { of: $(this), my: 'left top', at: 'left top' } );
+    ui.draggable.draggable( 'option', 'revert', false );
+    correctCards++;
+    
+  } 
+   
+  // If all the cards have been placed correctly then display a message
+  // and reset the cards for another go
+ 
+  if ( correctCards == 12 ) {
+    $('#successMessage').show();
+    $('#successMessage').animate( {
+      left: '380px',
+      top: '570px',
+      width: '300px',
+      height: '60px',
+      opacity: 1
+    } );
+  }
+ 
+}
+function hideMessage(){
+$('#message').animate( 
+    {
+      left: '220px',
+      top: '700px',
+      width: '600px',
+      height: '100px',
+      opacity: 0
+    });
+}
+function animateMessage(){
+$('#message').animate( 
+    {
+      left: '220px',
+      top: '700px',
+      width: '600px',
+      height: '100px',
+      opacity: 1
+    });
+     
+     }
+</script>
+</head>
+<body class="thrColFixHdr">
+<!-- begin address  -->
+<div id="container">
+  <div id="address">
+    <p>
+    <strong>
+    <script src="../../includes/subject.js" type="text/javascript"></script></strong> 
+    <script src="../../includes/year.js" type="text/javascript"></script><br />
+ 
+    </p>
+  </div>
+<!-- end address  --> 
+<div id="mainContent">
+ <!--Game-->
+  <div id="part1" style="display:block;">
+    <br />
+    <div id="gameContent">
+ 
+        <div id="cardPile"> </div>
+        <div id="cardSlots"> </div>
+        <div id="message"></div>
+            <div id="successMessage">
+                <span style="font-weight:bold;font-size:2em;">You did it!</span><br />
+                <button onclick="gameInit()">Play Again</button>
+            </div>
+      </div>
+    </div>
+</div>
+	<!-- This clearing element should immediately follow the #mainContent div in order to force the #container div to contain all child floats --><br class="clearfloat" />
